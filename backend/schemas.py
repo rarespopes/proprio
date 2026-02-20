@@ -91,7 +91,7 @@ class GoalAllocationItem(BaseModel):
     note: Optional[str] = ""
 
 class GoalAllocationCreate(BaseModel):
-    goal_id: int
+    goal_id: Optional[int] = None
     amount: float
     date: str
     note: Optional[str] = ""

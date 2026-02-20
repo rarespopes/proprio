@@ -17,7 +17,12 @@ async function req(method, path, body) {
 
   if (res.status === 204) return null
   const data = await res.json()
-  if (!res.ok) throw new Error(data.detail || 'Request failed')
+  if (!res.ok) {
+    const msg = Array.isArray(data.detail)
+      ? data.detail.map(d => d.msg).join(', ')
+      : (data.detail || 'Request failed')
+    throw new Error(msg)
+  }
   return data
 }
 
@@ -43,11 +48,11 @@ export const api = {
   deleteCommitment: (id)    => req('DELETE', `/commitments/${id}`),
 
   // Goals
-  getGoals:       ()          => req('GET', '/goals'),
-  createGoal:     (body)      => req('POST', '/goals', body),
-  updateGoal:     (id, b)     => req('PATCH', `/goals/${id}`, b),
-  deleteGoal:     (id)        => req('DELETE', `/goals/${id}`),
-  allocateToGoal: (id, body)  => req('POST', `/goals/${id}/allocate`, body),
+  getGoals:       ()         => req('GET', '/goals'),
+  createGoal:     (body)     => req('POST', '/goals', body),
+  updateGoal:     (id, b)    => req('PATCH', `/goals/${id}`, b),
+  deleteGoal:     (id)       => req('DELETE', `/goals/${id}`),
+  allocateToGoal: (id, body) => req('POST', `/goals/${id}/allocate`, body),
 
   // Income
   getIncome:    (params) => req('GET', `/income${params ? '?' + new URLSearchParams(params) : ''}`),
