@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { createPortal } from 'react-dom'
 
 export function Card({ children, style }) {
   return (
@@ -79,23 +80,41 @@ export function Badge({ children, color = 'amber' }) {
 }
 
 export function Modal({ title, onClose, children }) {
-  return (
-    <div style={{
-      position: 'fixed', inset: 0, background: 'rgba(26,23,20,0.35)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      zIndex: 100, padding: 24,
-    }} onClick={e => e.target === e.currentTarget && onClose()}>
-      <div className="fade-up" style={{
-        background: 'var(--cream)', borderRadius: 'var(--radius)', padding: 32,
-        width: '100%', maxWidth: 480, boxShadow: 'var(--shadow-md)',
-      }}>
+  return createPortal(
+    <div
+      onClick={e => e.target === e.currentTarget && onClose()}
+      style={{
+        position: 'fixed', inset: 0,
+        background: 'rgba(26,23,20,0.35)',
+        zIndex: 9999,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '24px',
+      }}
+    >
+      <div
+        className="fade-up"
+        onClick={e => e.stopPropagation()}
+        style={{
+          background: 'var(--cream)',
+          borderRadius: 'var(--radius)',
+          padding: 32,
+          width: '100%',
+          maxWidth: 480,
+          boxShadow: 'var(--shadow-md)',
+          maxHeight: 'calc(100vh - 48px)',
+          overflowY: 'auto',
+        }}
+      >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 22 }}>
           <h2 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 22, fontWeight: 500 }}>{title}</h2>
-          <button onClick={onClose} style={{ background: 'none', border: 'none', fontSize: 20, color: 'var(--ink-faint)', lineHeight: 1 }}>×</button>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', fontSize: 20, color: 'var(--ink-faint)', lineHeight: 1, cursor: 'pointer' }}>×</button>
         </div>
         {children}
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }
 
