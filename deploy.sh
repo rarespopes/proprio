@@ -3,10 +3,6 @@
 #
 # Usage with domain + HTTPS:  bash deploy.sh <domain> <email>
 # Usage with IP only:         bash deploy.sh <ip>
-#
-# Examples:
-#   bash deploy.sh proprio.yourdomain.com you@email.com
-#   bash deploy.sh 209.227.236.135
 
 set -e
 
@@ -21,8 +17,8 @@ if [ -z "$TARGET" ]; then
   exit 1
 fi
 
-# Detect if TARGET is an IP address
-if [[ $TARGET =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+# Detect if TARGET is an IP address using grep
+if echo "$TARGET" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$'; then
   MODE="ip"
 else
   MODE="domain"
@@ -90,7 +86,7 @@ pip install -q \
 # ── 6. Generate secret key ────────────────────────────────────────────────────
 echo "→ Generating secret key..."
 SECRET=$(python3 -c "import secrets; print(secrets.token_hex(32))")
-cat << ENVEOF > $INSTALL_DIR/backend/.env
+cat > $INSTALL_DIR/backend/.env << ENVEOF
 SECRET_KEY=$SECRET
 ENVEOF
 chmod 600 $INSTALL_DIR/backend/.env
@@ -110,7 +106,7 @@ npm run build --silent
 
 # ── 9. Nginx config ───────────────────────────────────────────────────────────
 echo "→ Configuring Nginx..."
-cat << NGINXEOF > /etc/nginx/sites-available/proprio
+cat > /etc/nginx/sites-available/proprio << NGINXEOF
 server {
     listen 80;
     server_name $TARGET;
@@ -144,12 +140,11 @@ if [ "$MODE" = "domain" ]; then
     -m $EMAIL --redirect
 else
   echo "→ Skipping SSL (IP-only mode)"
-  echo "   Access Proprio at: http://$TARGET"
 fi
 
 # ── 11. Systemd service ───────────────────────────────────────────────────────
 echo "→ Creating systemd service..."
-cat << SVCEOF > /etc/systemd/system/proprio.service
+cat > /etc/systemd/system/proprio.service << SVCEOF
 [Unit]
 Description=Proprio Finance API
 After=network.target
