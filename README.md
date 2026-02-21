@@ -1,6 +1,6 @@
 # Proprio — Self-Hosted Personal Finance
 
-A private & self-hosted finance tracker. Your data stays on your server.
+A private, beautiful, self-hosted finance tracker. Your data stays on your server.
 
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
@@ -22,32 +22,39 @@ A private & self-hosted finance tracker. Your data stays on your server.
 | Database | SQLite |
 | Auth | JWT + bcrypt |
 | Proxy | Nginx |
-| SSL | Let's Encrypt |
+| SSL | Let's Encrypt (optional) |
 | Process | systemd |
 
 ## Requirements
 
 - Ubuntu 22.04 or 24.04 VPS
-- A domain name pointed at your server's IP
 - Root access
+- A domain name pointed at your server IP *(optional — see IP-only mode below)*
 
 ## Quick Deploy
+
+**With a domain + HTTPS (recommended):**
 ```bash
 curl -fsSL https://raw.githubusercontent.com/rarespopes/proprio/main/deploy.sh | bash -s -- your.domain.com you@email.com
+```
+
+**IP-only mode (no domain, no SSL):**
+```bash
+curl -fsSL https://raw.githubusercontent.com/rarespopes/proprio/main/deploy.sh | bash -s -- 123.456.789.0
 ```
 
 Or clone and run manually:
 ```bash
 git clone https://github.com/rarespopes/proprio.git
-cd ledger
-bash deploy.sh your.domain.com you@email.com
+cd proprio
+bash deploy.sh your.domain.com you@email.com   # with domain
+bash deploy.sh 123.456.789.0                   # IP only
 ```
 
-The script handles everything — packages, Python environment, frontend build, Nginx, SSL, systemd service, and nightly backups. Takes about 5 minutes.
+The script handles everything — packages, Python environment, frontend build, Nginx, SSL (if domain provided), systemd service, and nightly backups. Takes about 5 minutes.
 
-## Manual Deployment
-
-If you prefer step-by-step control, see the full deployment guide in [DEPLOY.md](DEPLOY.md).
+> **No domain?** You can also get a free subdomain from [DuckDNS](https://www.duckdns.org) 
+> (e.g. `yourname.duckdns.org`) and use it exactly like a paid domain, with full HTTPS.
 
 ## Updating
 ```bash

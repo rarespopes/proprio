@@ -1,17 +1,35 @@
 #!/bin/bash
 # Proprio — automated deployment script
-# Usage: bash deploy.sh <domain> <email>
-# Example: bash deploy.sh proprio.yourdomain.com you@email.com
+#
+# Usage with domain + HTTPS:  bash deploy.sh <domain> <email>
+# Usage with IP only:         bash deploy.sh <ip>
+#
+# Examples:
+#   bash deploy.sh proprio.yourdomain.com you@email.com
+#   bash deploy.sh 209.227.236.135
 
 set -e
 
-DOMAIN=${1}
+TARGET=${1}
 EMAIL=${2}
 INSTALL_DIR="/opt/proprio"
 
-if [ -z "$DOMAIN" ] || [ -z "$EMAIL" ]; then
-  echo "Usage: bash deploy.sh <domain> <email>"
+if [ -z "$TARGET" ]; then
+  echo "Usage:"
+  echo "  bash deploy.sh <domain> <email>   # with HTTPS"
+  echo "  bash deploy.sh <ip>               # IP only, no SSL"
   exit 1
+fi
+
+# Detect if TARGET is an IP address
+if [[ $TARGET =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+  MODE="ip"
+else
+  MODE="domain"
+  if [ -z "$EMAIL" ]; then
+    echo "Email required when using a domain (for SSL certificate)."
+    exit 1
+  fi
 fi
 
 echo ""
@@ -20,8 +38,14 @@ echo "║     Proprio — Finance Platform       ║"
 echo "║     Self-hosted deployment           ║"
 echo "╚══════════════════════════════════════╝"
 echo ""
-echo "Domain:  $DOMAIN"
-echo "Email:   $EMAIL"
+if [ "$MODE" = "domain" ]; then
+  echo "Mode:    Domain + HTTPS"
+  echo "Domain:  $TARGET"
+  echo "Email:   $EMAIL"
+else
+  echo "Mode:    IP only (no SSL)"
+  echo "IP:      $TARGET"
+fi
 echo "Dir:     $INSTALL_DIR"
 echo ""
 read -p "Proceed? (y/n) " -n 1 -r; echo
@@ -32,7 +56,7 @@ echo "→ Installing system packages..."
 apt update -qq && apt install -y \
   python3 python3-pip python3-venv \
   nginx certbot python3-certbot-nginx \
-  git curl nodejs npm ufw build-essential sqlite3
+  git curl ufw build-essential sqlite3
 
 # ── 2. Node 20 ────────────────────────────────────────────────────────────────
 echo "→ Installing Node.js 20..."
@@ -89,7 +113,7 @@ echo "→ Configuring Nginx..."
 cat << NGINXEOF > /etc/nginx/sites-available/proprio
 server {
     listen 80;
-    server_name $DOMAIN;
+    server_name $TARGET;
 
     root $INSTALL_DIR/frontend/dist;
     index index.html;
@@ -112,11 +136,16 @@ ln -sf /etc/nginx/sites-available/proprio /etc/nginx/sites-enabled/proprio
 rm -f /etc/nginx/sites-enabled/default
 nginx -t && systemctl reload nginx
 
-# ── 10. SSL ───────────────────────────────────────────────────────────────────
-echo "→ Obtaining SSL certificate..."
-certbot --nginx -d $DOMAIN \
-  --non-interactive --agree-tos \
-  -m $EMAIL --redirect
+# ── 10. SSL (domain mode only) ────────────────────────────────────────────────
+if [ "$MODE" = "domain" ]; then
+  echo "→ Obtaining SSL certificate..."
+  certbot --nginx -d $TARGET \
+    --non-interactive --agree-tos \
+    -m $EMAIL --redirect
+else
+  echo "→ Skipping SSL (IP-only mode)"
+  echo "   Access Proprio at: http://$TARGET"
+fi
 
 # ── 11. Systemd service ───────────────────────────────────────────────────────
 echo "→ Creating systemd service..."
@@ -154,11 +183,15 @@ echo "╔═══════════════════════�
 echo "║     Proprio is live!                 ║"
 echo "╚══════════════════════════════════════╝"
 echo ""
-echo "  URL:     https://$DOMAIN"
-echo "  API:     https://$DOMAIN/api/health"
+if [ "$MODE" = "domain" ]; then
+  echo "  URL:     https://$TARGET"
+  echo "  API:     https://$TARGET/api/health"
+else
+  echo "  URL:     http://$TARGET"
+  echo "  API:     http://$TARGET/api/health"
+fi
+echo ""
 echo "  Logs:    journalctl -u proprio -f"
 echo "  Restart: systemctl restart proprio"
-echo ""
-echo "  Your data lives at:"
-echo "  $INSTALL_DIR/backend/db.sqlite3"
+echo "  Data:    $INSTALL_DIR/backend/db.sqlite3"
 echo ""
