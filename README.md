@@ -33,12 +33,12 @@ A private, beautiful, self-hosted finance tracker. Your data stays on your serve
 
 ## Quick Deploy
 ```bash
-curl -fsSL https://raw.githubusercontent.com/rarespopes/ledger/main/deploy.sh | bash -s -- your.domain.com you@email.com
+curl -fsSL https://raw.githubusercontent.com/rarespopes/proprio/main/deploy.sh | bash -s -- your.domain.com you@email.com
 ```
 
 Or clone and run manually:
 ```bash
-git clone https://github.com/rarespopes/ledger.git
+git clone https://github.com/rarespopes/proprio.git
 cd ledger
 bash deploy.sh your.domain.com you@email.com
 ```
