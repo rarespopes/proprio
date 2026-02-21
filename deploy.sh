@@ -167,6 +167,16 @@ systemctl daemon-reload
 systemctl enable proprio
 systemctl start proprio
 
+# Wait for service to be ready
+echo "→ Waiting for service to start..."
+for i in $(seq 1 15); do
+  if curl -sf http://127.0.0.1:8000/api/health > /dev/null 2>&1; then
+    echo "  ✓ Service is ready"
+    break
+  fi
+  sleep 1
+done
+
 # ── 12. Nightly backup ────────────────────────────────────────────────────────
 echo "→ Setting up nightly backups..."
 echo "0 2 * * * root sqlite3 $INSTALL_DIR/backend/db.sqlite3 '.backup $INSTALL_DIR/backups/db_\$(date +\%Y\%m\%d).sqlite3'" \
