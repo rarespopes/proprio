@@ -1,6 +1,6 @@
 # Proprio — Self-Hosted Personal Finance
 
-A private, beautiful, self-hosted finance tracker. Your data stays on your server.
+A private & self-hosted finance tracker. Your data stays on your server.
 
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
