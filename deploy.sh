@@ -44,7 +44,7 @@ else
 fi
 echo "Dir:     $INSTALL_DIR"
 echo ""
-read -p "Proceed? (y/n) " -n 1 -r; echo
+read -p "Proceed? (y/n) " -n 1 -r < /dev/tty; echo
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then exit 1; fi
 
 # ── 1. System packages ────────────────────────────────────────────────────────
