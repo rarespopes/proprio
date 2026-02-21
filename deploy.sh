@@ -93,17 +93,9 @@ chmod 600 $INSTALL_DIR/backend/.env
 
 # ── 7. Initialise database ────────────────────────────────────────────────────
 echo "→ Initialising database..."
-cat > /tmp/init_db.py << PYEOF
-import sys
-sys.path.insert(0, '$INSTALL_DIR/backend')
-import os
-os.chdir('$INSTALL_DIR/backend')
-from database import engine, Base
-import models
-Base.metadata.create_all(bind=engine)
-print("Database initialised successfully")
-PYEOF
-$INSTALL_DIR/backend/venv/bin/python3 /tmp/init_db.py
+# Database is created automatically by FastAPI on first start
+# Just ensure the directory is writable
+touch $INSTALL_DIR/backend/db.sqlite3
 chmod 600 $INSTALL_DIR/backend/db.sqlite3
 
 # ── 8. Frontend build ─────────────────────────────────────────────────────────
