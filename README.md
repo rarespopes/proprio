@@ -2,6 +2,8 @@
 
 A private, beautiful, self-hosted finance tracker. Your data stays on your server.
 
+<img src="https://github.com/user-attachments/assets/dc25e826-be18-492c-a7ef-9a5d00629e0b" width="830" alt="Ledger project screenshot" />
+
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
 ## Features
