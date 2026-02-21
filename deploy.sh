@@ -48,7 +48,7 @@ ufw --force enable > /dev/null
 # ── 4. Clone repo ─────────────────────────────────────────────────────────────
 echo "→ Cloning Proprio..."
 mkdir -p $INSTALL_DIR
-git clone https://github.com/rarespopes/ledger.git $INSTALL_DIR
+git clone https://github.com/rarespopes/proprio.git $INSTALL_DIR
 mkdir -p $INSTALL_DIR/backups
 
 # ── 5. Python venv ────────────────────────────────────────────────────────────
