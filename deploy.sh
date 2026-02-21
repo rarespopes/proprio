@@ -95,7 +95,8 @@ chmod 600 $INSTALL_DIR/backend/.env
 echo "→ Initialising database..."
 cd $INSTALL_DIR/backend
 source venv/bin/activate
-python3 -c "from database import engine, Base; import models; Base.metadata.create_all(bind=engine)"
+mkdir -p $INSTALL_DIR/backend
+$INSTALL_DIR/backend/venv/bin/python3 -c "import os; os.chdir('$INSTALL_DIR/backend'); from database import engine, Base; import models; Base.metadata.create_all(bind=engine)"
 chmod 600 $INSTALL_DIR/backend/db.sqlite3
 
 # ── 8. Frontend build ─────────────────────────────────────────────────────────
