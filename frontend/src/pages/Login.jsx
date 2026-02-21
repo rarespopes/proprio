@@ -36,7 +36,7 @@ export default function Login() {
         boxShadow: '0 8px 48px rgba(26,23,20,0.14)',
       }}>
         <div style={{ background: 'var(--ink)', padding: '40px 40px 32px', textAlign: 'center' }}>
-          <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 28, color: 'white', fontWeight: 400, letterSpacing: '0.02em' }}>Ledger</div>
+          <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 28, color: 'white', fontWeight: 400, letterSpacing: '0.02em' }}>Proprio</div>
           <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', marginTop: 6 }}>Personal finance, thoughtfully tracked.</p>
         </div>
 

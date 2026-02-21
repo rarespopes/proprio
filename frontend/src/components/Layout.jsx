@@ -33,7 +33,7 @@ export default function Layout() {
         flexDirection: 'column', flexShrink: 0, padding: '32px 0',
       }}>
         <div style={{ padding: '0 28px 28px', borderBottom: '1px solid rgba(255,255,255,0.08)', marginBottom: 20 }}>
-          <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 22, color: 'white', fontWeight: 500, letterSpacing: '0.02em' }}>Ledger</div>
+          <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 22, color: 'white', fontWeight: 500, letterSpacing: '0.02em' }}>Proprio</div>
           <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)', marginTop: 2, letterSpacing: '0.06em', textTransform: 'uppercase' }}>Personal Finance</div>
         </div>
 

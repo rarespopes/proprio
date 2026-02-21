@@ -39,7 +39,7 @@ export default function Register() {
         boxShadow: '0 8px 48px rgba(26,23,20,0.14)',
       }}>
         <div style={{ background: 'var(--ink)', padding: '40px 40px 32px', textAlign: 'center' }}>
-          <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 28, color: 'white', fontWeight: 400 }}>Ledger</div>
+          <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 28, color: 'white', fontWeight: 400 }}>Proprio</div>
           <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.45)', marginTop: 6 }}>Set up your personal finance workspace.</p>
         </div>
 
